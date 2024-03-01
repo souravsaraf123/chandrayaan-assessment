@@ -48,7 +48,7 @@ Assume that the spacecraft’s movement and rotations are rigid, and it cannot m
 Example
 Given the starting point (0, 0, 0) following (x, y, z) and initial direction N, the following commands should result in the indicated final position and direction:
 
-Commands: [“f”, “r”, “u”, “b”, “l”]
+Commands: [f, r, u, b, l]
 
 Starting Position: (0, 0, 0)
 
@@ -67,3 +67,20 @@ Initial Direction: N
 Final Position: (0, 1, -1)
 
 Final Direction: N
+
+#### My program will produce the following output : 
+
+```
+ℹ tests 47
+ℹ suites 8
+ℹ pass 47
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 61.619301
+```
+
+![image](https://github.com/souravsaraf123/chandrayaan-assessment/assets/40688353/639b078e-7702-4971-8ce0-a463a1c8d68a)
+![image](https://github.com/souravsaraf123/chandrayaan-assessment/assets/40688353/c0f0a3e8-cee7-4694-bcaf-9112549ee26d)
+

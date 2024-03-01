@@ -1,5 +1,7 @@
 import { describe, it } from "node:test";
 
+import assert from "node:assert";
+
 interface Position
 {
 	x: number;
@@ -73,5 +75,13 @@ describe("Chandrayan Movement", () =>
 	{
 		let ch = new Chayndrayan();
 		ch.move([]);
+	});
+
+	it("Chandraayan stays at same position when no commands are given", () =>
+	{
+		let ch = new Chayndrayan();
+		ch.move([]);
+		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+		assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
 	});
 });

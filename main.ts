@@ -416,6 +416,72 @@ describe("Chandrayan Movement", () =>
 			assert.deepStrictEqual({ x: 0, y: 0, z: 0 }, ch.currentPosition);
 			assert.deepStrictEqual(Direction.Down, ch.currentDirection);
 		});
+	});
 
+	describe("Up Down Combined with f,b Movement", () =>
+	{
+		it("Move via [u,f] should reach (0,0,1) Up", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.u, Commands.f]);
+			assert.deepStrictEqual({ x: 0, y: 0, z: 1 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.Up, ch.currentDirection);
+		});
+
+		it("Move via [u,b] should reach (0,0,-1) Up", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.u, Commands.b]);
+			assert.deepStrictEqual({ x: 0, y: 0, z: -1 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.Up, ch.currentDirection);
+		});
+
+		it("Move via [d,f] should reach (0,0,-1) Down", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.d, Commands.f]);
+			assert.deepStrictEqual({ x: 0, y: 0, z: -1 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.Down, ch.currentDirection);
+		});
+
+		it("Move via [d,b] should reach (0,0,1) Down", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.d, Commands.b]);
+			assert.deepStrictEqual({ x: 0, y: 0, z: 1 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.Down, ch.currentDirection);
+		});
+
+		it("Start at (3,4,5) Up and Move via [f] should reach (3,4,6) Up", () =>
+		{
+			let ch = new Chayndrayan({ x: 3, y: 4, z: 5 }, Direction.Up);
+			ch.move([Commands.f]);
+			assert.deepStrictEqual({ x: 3, y: 4, z: 6 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.Up, ch.currentDirection);
+		});
+
+		it("Start at (3,4,5) Up and Move via [b] should reach (3,4,4) Up", () =>
+		{
+			let ch = new Chayndrayan({ x: 3, y: 4, z: 5 }, Direction.Up);
+			ch.move([Commands.b]);
+			assert.deepStrictEqual({ x: 3, y: 4, z: 4 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.Up, ch.currentDirection);
+		});
+
+		it("Start at (3,4,5) Up and Move via [d,f] should reach (3,4,4) Down", () =>
+		{
+			let ch = new Chayndrayan({ x: 3, y: 4, z: 5 }, Direction.Up);
+			ch.move([Commands.d, Commands.f]);
+			assert.deepStrictEqual({ x: 3, y: 4, z: 4 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.Down, ch.currentDirection);
+		});
+
+		it("Start at (3,4,5) Down and Move via [b,u] should reach (3,4,6) Up", () =>
+		{
+			let ch = new Chayndrayan({ x: 3, y: 4, z: 5 }, Direction.Down);
+			ch.move([Commands.b, Commands.u]);
+			assert.deepStrictEqual({ x: 3, y: 4, z: 6 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.Up, ch.currentDirection);
+		});
 	});
 });

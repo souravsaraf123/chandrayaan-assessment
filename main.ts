@@ -50,6 +50,29 @@ class Chayndrayan
 
 	move(commands: Commands[])
 	{
+		for (let c of commands)
+		{
+			// handle forward and backward movement
+			if ([Commands.f, Commands.b].includes(c))
+			{
+				// calculate delta to add to the coordinate
+				let delta = c === Commands.f ? 1 : -1;
+
+				// figure out the axis to move on
+				if (this.currentDirection === Direction.North || this.currentDirection === Direction.South)
+				{
+					this.currentPosition.y += delta;
+				}
+				else if (this.currentDirection === Direction.East || this.currentDirection === Direction.West)
+				{
+					this.currentPosition.x += delta;
+				}
+				else if (this.currentDirection === Direction.Up || this.currentDirection === Direction.Down)
+				{
+					this.currentPosition.z += delta;
+				}
+			}
+		}
 	}
 }
 
@@ -82,6 +105,14 @@ describe("Chandrayan Movement", () =>
 		let ch = new Chayndrayan();
 		ch.move([]);
 		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+		assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
+	});
+
+	it("Chandrayaan moves forward by 1 step the current direction using f command", () =>
+	{
+		let ch = new Chayndrayan();
+		ch.move([Commands.f]);
+		assert.deepStrictEqual({ x: 0, y: 1, z: 0 }, ch.currentPosition);
 		assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
 	});
 });

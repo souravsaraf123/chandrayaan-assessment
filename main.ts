@@ -17,6 +17,16 @@ enum Direction
 	"Down" = "Down",
 }
 
+enum Commands
+{
+	"f" = "f",
+	"b" = "b",
+	"l" = "l",
+	"r" = "r",
+	"u" = "u",
+	"d" = "d",
+}
+
 class Chayndrayan
 {
 	initialPosition: Position = { x: 0, y: 0, z: 0 };
@@ -34,6 +44,10 @@ class Chayndrayan
 		// the current position of the spacecraft without any movement will be the initial position
 		this.currentPosition = structuredClone(this.initialPosition); // need to clone , otherwise they will have the same reference
 		this.currentDirection = this.initialDirection;
+	}
+
+	move(commands: Commands[])
+	{
 	}
 }
 
@@ -53,5 +67,11 @@ describe("Chandrayan Movement", () =>
 	{
 		let ch = new Chayndrayan({ x: 3, y: 4, z: 5 }, Direction.East);
 		console.log(ch);
+	});
+
+	it("Chandrayaan can move when given an array of commands", () =>
+	{
+		let ch = new Chayndrayan();
+		ch.move([]);
 	});
 });

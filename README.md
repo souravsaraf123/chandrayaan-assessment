@@ -1,26 +1,27 @@
 # Chandrayaan TDD Assessment
 
-#### The assignment is written in typescript and can be run via Node.js. Steps to run the project : 
+#### The assignment is written in Typescript and can be run via Node.js. Steps to run the project : 
 
 - Download the repository 
 
-`
+```
 git clone https://github.com/souravsaraf123/chandrayaan-assessment.git
-
+```
+```
 cd chandrayaan-assessment
-`
+```
 
 - Assuming Node.js in installed. Install the packages via 
 
-`
+```
 npm install
-`
+```
 
 - Run the test 
 
-`
+```
 npm start
-`
+```
 
 ## Problem Statement
 ### Chandrayaan 3 Lunar Craft: Galactic Space Craft Control

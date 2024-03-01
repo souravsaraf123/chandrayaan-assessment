@@ -77,17 +77,29 @@ class Chayndrayan
 				let delta = c === Commands.f ? 1 : -1;
 
 				// figure out the axis to move on
-				if (this.currentDirection === Direction.North || this.currentDirection === Direction.South)
+				if (this.currentDirection === Direction.North)
 				{
 					this.currentPosition.y += delta;
 				}
-				else if (this.currentDirection === Direction.East || this.currentDirection === Direction.West)
+				else if (this.currentDirection === Direction.South)
+				{
+					this.currentPosition.y -= delta;
+				}
+				else if (this.currentDirection === Direction.East)
 				{
 					this.currentPosition.x += delta;
 				}
-				else if (this.currentDirection === Direction.Up || this.currentDirection === Direction.Down)
+				else if (this.currentDirection === Direction.West)
+				{
+					this.currentPosition.x -= delta;
+				}
+				else if (this.currentDirection === Direction.Up)
 				{
 					this.currentPosition.z += delta;
+				}
+				else if (this.currentDirection === Direction.Down)
+				{
+					this.currentPosition.z -= delta;
 				}
 			}
 
@@ -120,215 +132,264 @@ class Chayndrayan
 
 describe("Chandrayan Movement", () =>
 {
-	it("nothing", () =>
+	describe("Setup For Initial Position, Direction and Move function", () =>
 	{
+		it("Chandrayaan has an x,y and z position co-ordinates and direction, can be constructed with defaults", () =>
+		{
+			let ch = new Chayndrayan();
+		});
+
+		it("Chandrayaan can take as input an initial position and direction", () =>
+		{
+			let ch = new Chayndrayan({ x: 3, y: 4, z: 5 }, Direction.East);
+		});
+
+		it("Chandrayaan can move when given an array of commands", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([]);
+		});
+
+		it("Chandraayan stays put when command is []", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
+		});
 	});
 
-	//#region Setup For Initial Position, Direction and Move function
-
-	it("Chandrayaan has an x,y and z position co-ordinates and direction, can be constructed with defaults", () =>
+	describe("Forward and Backward Movement Tests", () =>
 	{
-		let ch = new Chayndrayan();
-		console.log(ch);
+		it("Move via [f] should reach (0,1,0)", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.f]);
+			assert.deepStrictEqual({ x: 0, y: 1, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
+		});
+
+		it("Move via [f,f] should reach (0,2,0)", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.f, Commands.f]);
+			assert.deepStrictEqual({ x: 0, y: 2, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
+		});
+
+		it("Move via [b] should reach (0,-1,0)", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.b]);
+			assert.deepStrictEqual({ x: 0, y: -1, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
+		});
+
+		it("Move via [b,b] should reach (0,-2,0)", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.b, Commands.b]);
+			assert.deepStrictEqual({ x: 0, y: -2, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
+		});
+
+		it("Move via [f,f,b] should reach (0,1,0)", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.f, Commands.f, Commands.b]);
+			assert.deepStrictEqual({ x: 0, y: 1, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
+		});
+
+		it("Start facing East , Move via [f] should reach (1,0,0)", () =>
+		{
+			let ch = new Chayndrayan({ x: 0, y: 0, z: 0, }, Direction.East);
+			ch.move([Commands.f]);
+			assert.deepStrictEqual({ x: 1, y: 0, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
+		});
+
+		it("Start facing Up , Move via [f] should reach (0,0,1)", () =>
+		{
+			let ch = new Chayndrayan({ x: 0, y: 0, z: 0, }, Direction.Up);
+			ch.move([Commands.f]);
+			assert.deepStrictEqual({ x: 0, y: 0, z: 1 }, ch.currentPosition);
+			assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
+		});
+
+		it("Start at (3,4,5) facing East, Move via [f,f,f,f,f,b] should reach (7,4,5)", () =>
+		{
+			let ch = new Chayndrayan({ x: 3, y: 4, z: 5, }, Direction.East);
+			ch.move([Commands.f, Commands.f, Commands.f, Commands.f, Commands.f, Commands.b]);
+			assert.deepStrictEqual({ x: 7, y: 4, z: 5 }, ch.currentPosition);
+			assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
+		});
 	});
 
-	it("Chandrayaan can take as input an initial position and direction", () =>
+	describe("Left and Right Movement Tests", () =>
 	{
-		let ch = new Chayndrayan({ x: 3, y: 4, z: 5 }, Direction.East);
-		console.log(ch);
+		it("Start facing North , Move via [l] should face West", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.l]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.West, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [l,l] should face South", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.l, Commands.l]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.South, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [l,l,l] should face East", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.l, Commands.l, Commands.l]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.East, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [l,l,l,l] should face North", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.l, Commands.l, Commands.l, Commands.l]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.North, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [l,l,l,l,l] should face West", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.l, Commands.l, Commands.l, Commands.l, Commands.l]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.West, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [r] should face East", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.r]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.East, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [r,r] should face South", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.r, Commands.r]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.South, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [r,r,r] should face West", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.r, Commands.r, Commands.r]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.West, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [r,r,r,r] should face North", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.r, Commands.r, Commands.r, Commands.r]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.North, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [r,r,r,r,r] should face East", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.r, Commands.r, Commands.r, Commands.r, Commands.r]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.East, ch.currentDirection);
+		});
+
+		// l and r combined
+		it("Start facing North , Move via [l,r] should face West", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.l, Commands.r]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.North, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [l,l,r] should face West", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.l, Commands.l, Commands.r]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.West, ch.currentDirection);
+		});
+
+		it("Start facing East , Move via [l] should face North", () =>
+		{
+			let ch = new Chayndrayan({ x: 0, y: 0, z: 0, }, Direction.East);
+			ch.move([Commands.l]);
+			assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
+			assert.deepStrictEqual(Direction.North, ch.currentDirection);
+		});
 	});
 
-	it("Chandrayaan can move when given an array of commands", () =>
+	describe("Movement on X-Y Plane using f,b,l,r combined", () =>
 	{
-		let ch = new Chayndrayan();
-		ch.move([]);
+		it("Start facing North , Move via [f,r] should reach (0,1,0) East", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.f, Commands.r]);
+			assert.deepStrictEqual({ x: 0, y: 1, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.East, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [f,r,f] should reach (1,1,0) East", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.f, Commands.r, Commands.f]);
+			assert.deepStrictEqual({ x: 1, y: 1, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.East, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [r,f,l,f] should reach (1,1,0) North", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.r, Commands.f, Commands.l, Commands.f]);
+			assert.deepStrictEqual({ x: 1, y: 1, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.North, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [f,r,f,r,b] should reach (1,2,0) South", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.f, Commands.r, Commands.f, Commands.r, Commands.b]);
+			assert.deepStrictEqual({ x: 1, y: 2, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.South, ch.currentDirection);
+		});
+
+		it("Start facing North , Move via [f,r,b,r,b] should reach (-1,2,0) South", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.f, Commands.r, Commands.b, Commands.r, Commands.b]);
+			assert.deepStrictEqual({ x: -1, y: 2, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.South, ch.currentDirection);
+		});
+
+		it("Start facing North , Full Circle Move via [f,l,f,l,f,l,f,l] should reach (0,0,0) North", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.f, Commands.l, Commands.f, Commands.l, Commands.f, Commands.l, Commands.f, Commands.l]);
+			assert.deepStrictEqual({ x: 0, y: 0, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
+		});
+
+		it("Start at (2,3) East , Move via [f,l,f,f] should reach (3,5,0) North", () =>
+		{
+			let ch = new Chayndrayan({ x: 2, y: 3, z: 0 }, Direction.East);
+			ch.move([Commands.f, Commands.l, Commands.f, Commands.f]);
+			assert.deepStrictEqual({ x: 3, y: 5, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.North, ch.currentDirection);
+		});
 	});
-
-	it("Chandraayan stays put when command is []", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
-	});
-
-	//#endregion
-
-	//#region Forward and Backward Movement Tests
-
-	it("Move via [f] should reach (0,1,0)", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.f]);
-		assert.deepStrictEqual({ x: 0, y: 1, z: 0 }, ch.currentPosition);
-		assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
-	});
-
-	it("Move via [f,f] should reach (0,2,0)", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.f, Commands.f]);
-		assert.deepStrictEqual({ x: 0, y: 2, z: 0 }, ch.currentPosition);
-		assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
-	});
-
-	it("Move via [b] should reach (0,-1,0)", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.b]);
-		assert.deepStrictEqual({ x: 0, y: -1, z: 0 }, ch.currentPosition);
-		assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
-	});
-
-	it("Move via [b,b] should reach (0,-2,0)", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.b, Commands.b]);
-		assert.deepStrictEqual({ x: 0, y: -2, z: 0 }, ch.currentPosition);
-		assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
-	});
-
-	it("Move via [f,f,b] should reach (0,1,0)", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.f, Commands.f, Commands.b]);
-		assert.deepStrictEqual({ x: 0, y: 1, z: 0 }, ch.currentPosition);
-		assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
-	});
-
-	it("Start facing East , Move via [f] should reach (1,0,0)", () =>
-	{
-		let ch = new Chayndrayan({ x: 0, y: 0, z: 0, }, Direction.East);
-		ch.move([Commands.f]);
-		assert.deepStrictEqual({ x: 1, y: 0, z: 0 }, ch.currentPosition);
-		assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
-	});
-
-	it("Start facing Up , Move via [f] should reach (0,0,1)", () =>
-	{
-		let ch = new Chayndrayan({ x: 0, y: 0, z: 0, }, Direction.Up);
-		ch.move([Commands.f]);
-		assert.deepStrictEqual({ x: 0, y: 0, z: 1 }, ch.currentPosition);
-		assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
-	});
-
-	it("Start at (3,4,5) facing East, Move via [f,f,f,f,f,b] should reach (7,4,5)", () =>
-	{
-		let ch = new Chayndrayan({ x: 3, y: 4, z: 5, }, Direction.East);
-		ch.move([Commands.f, Commands.f, Commands.f, Commands.f, Commands.f, Commands.b]);
-		assert.deepStrictEqual({ x: 7, y: 4, z: 5 }, ch.currentPosition);
-		assert.deepStrictEqual(ch.initialDirection, ch.currentDirection);
-	});
-
-	//#endregion
-
-	//#region Left and Right Movement Tests
-
-	it("Start facing North , Move via [l] should face West", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.l]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.West, ch.currentDirection);
-	});
-
-	it("Start facing North , Move via [l,l] should face South", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.l, Commands.l]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.South, ch.currentDirection);
-	});
-
-	it("Start facing North , Move via [l,l,l] should face East", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.l, Commands.l, Commands.l]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.East, ch.currentDirection);
-	});
-
-	it("Start facing North , Move via [l,l,l,l] should face North", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.l, Commands.l, Commands.l, Commands.l]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.North, ch.currentDirection);
-	});
-
-	it("Start facing North , Move via [l,l,l,l,l] should face West", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.l, Commands.l, Commands.l, Commands.l, Commands.l]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.West, ch.currentDirection);
-	});
-
-	it("Start facing North , Move via [r] should face East", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.r]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.East, ch.currentDirection);
-	});
-
-	it("Start facing North , Move via [r,r] should face South", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.r, Commands.r]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.South, ch.currentDirection);
-	});
-
-	it("Start facing North , Move via [r,r,r] should face West", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.r, Commands.r, Commands.r]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.West, ch.currentDirection);
-	});
-
-	it("Start facing North , Move via [r,r,r,r] should face North", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.r, Commands.r, Commands.r, Commands.r]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.North, ch.currentDirection);
-	});
-
-	it("Start facing North , Move via [r,r,r,r,r] should face East", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.r, Commands.r, Commands.r, Commands.r, Commands.r]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.East, ch.currentDirection);
-	});
-
-	// l and r combined
-	it("Start facing North , Move via [l,r] should face West", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.l, Commands.r]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.North, ch.currentDirection);
-	});
-
-	it("Start facing North , Move via [l,l,r] should face West", () =>
-	{
-		let ch = new Chayndrayan();
-		ch.move([Commands.l, Commands.l, Commands.r]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.West, ch.currentDirection);
-	});
-
-	it("Start facing East , Move via [l] should face North", () =>
-	{
-		let ch = new Chayndrayan({ x: 0, y: 0, z: 0, }, Direction.East);
-		ch.move([Commands.l]);
-		assert.deepStrictEqual(ch.initialPosition, ch.currentPosition);
-		assert.deepStrictEqual(Direction.North, ch.currentDirection);
-	});
-
-	//#endregion
-
 });

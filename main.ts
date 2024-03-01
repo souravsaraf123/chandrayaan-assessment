@@ -484,4 +484,72 @@ describe("Chandrayan Movement", () =>
 			assert.deepStrictEqual(Direction.Up, ch.currentDirection);
 		});
 	});
+
+	describe("Move in all Axes", () =>
+	{
+		it("Move via [f,r,f,u,f,l] should reach (1,1,1) North", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.f, Commands.r, Commands.f, Commands.u, Commands.f, Commands.l]);
+			assert.deepStrictEqual({ x: 1, y: 1, z: 1 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.North, ch.currentDirection);
+		});
+
+		it("Start at (4,6,8) North andMove via [f,r,f,u,f,l] should reach (1,1,1) North", () =>
+		{
+			let ch = new Chayndrayan({ x: 4, y: 6, z: 8 }, Direction.North);
+			ch.move([Commands.f, Commands.r, Commands.f, Commands.u, Commands.f, Commands.l]);
+			assert.deepStrictEqual({ x: 5, y: 7, z: 9 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.North, ch.currentDirection);
+		});
+
+		it("[EXAMPLE CASE GIVEN] : Move via  [f,r,u,b,l] should reach (0,1,-1) North", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.f, Commands.r, Commands.u, Commands.b, Commands.l]);
+			assert.deepStrictEqual({ x: 0, y: 1, z: -1 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.North, ch.currentDirection);
+		});
+
+		it("Circle Move forward via [f,r,f,u,f,d,f,r,f,r,f,r] should reach (0,0,0) North", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([
+				Commands.f,
+				Commands.r,
+				Commands.f,
+				Commands.u,
+				Commands.f,
+				Commands.d,
+				Commands.f,
+				Commands.r,
+				Commands.f,
+				Commands.r,
+				Commands.f,
+				Commands.r
+			]);
+			assert.deepStrictEqual({ x: 0, y: 0, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.North, ch.currentDirection);
+		});
+		it("Circle Move backward via [b,r,b,u,b,d,b,r,b,r,b,r] should reach (0,0,0) North", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([
+				Commands.b,
+				Commands.r,
+				Commands.b,
+				Commands.u,
+				Commands.b,
+				Commands.d,
+				Commands.b,
+				Commands.r,
+				Commands.b,
+				Commands.r,
+				Commands.b,
+				Commands.r
+			]);
+			assert.deepStrictEqual({ x: 0, y: 0, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.North, ch.currentDirection);
+		});
+	});
 });

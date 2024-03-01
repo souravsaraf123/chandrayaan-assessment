@@ -103,7 +103,7 @@ class Chayndrayan
 				}
 			}
 
-			// handle left and right movement
+			// handle left and right turn
 			if ([Commands.l, Commands.r].includes(c))
 			{
 				let clockWiseDirections: XYDirection[] = [
@@ -125,6 +125,12 @@ class Chayndrayan
 				// update the lastXY direction
 				this.lastXYDirection = clockWiseDirections[updatedIndex];
 				this.currentDirection = this.lastXYDirection;
+			}
+
+			// handle up and down
+			if ([Commands.u, Commands.d].includes(c))
+			{
+				this.currentDirection = (c === Commands.u) ? Direction.Up : Direction.Down;
 			}
 		}
 	}
@@ -391,5 +397,25 @@ describe("Chandrayan Movement", () =>
 			assert.deepStrictEqual({ x: 3, y: 5, z: 0 }, ch.currentPosition);
 			assert.deepStrictEqual(Direction.North, ch.currentDirection);
 		});
+	});
+
+	describe("Up Down Movement", () =>
+	{
+		it("Move via [u] should reach (0,0,0) Up", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.u]);
+			assert.deepStrictEqual({ x: 0, y: 0, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.Up, ch.currentDirection);
+		});
+
+		it("Move via [d] should reach (0,0,0) Down", () =>
+		{
+			let ch = new Chayndrayan();
+			ch.move([Commands.d]);
+			assert.deepStrictEqual({ x: 0, y: 0, z: 0 }, ch.currentPosition);
+			assert.deepStrictEqual(Direction.Down, ch.currentDirection);
+		});
+
 	});
 });
